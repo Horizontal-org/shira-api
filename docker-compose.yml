@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: nophish-api-dev
+    image: nophish-api-dev:1.0.0
+    build:
+        context: .
+        target: development
+        dockerfile: ./Dockerfile.development
+    command: yarn start:debug
+    ports:
+        - 3000:3000
+        - 9229:9229
+    networks:
+        - nestjs-network
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+    restart: unless-stopped
+  prod:
+    container_name: nophish-api-prod
+    image: nestjs-api-prod:1.0.0
+    build:
+        context: .
+        target: production
+        dockerfile: ./Dockerfile.production
+    command: yarn start:prod
+    ports:
+        - 3000:3000
+        - 9229:9229
+    networks:
+        - nestjs-network
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+    restart: unless-stopped
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - nestjs-network
+
+networks:
+  nestjs-network:
+
+volumes:
+  db-data:

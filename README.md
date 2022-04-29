@@ -22,6 +22,16 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+
+## Required clients to install
+  - nestjs cli
+  - typeorm cli
+
+## Run migration
+  this needs to be inside docker container
+
+   - to run migrations `npm run typeorm run:migrations`
+   - to create migrations `npm run typeorm migration:create -- -n YourMigration`
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
