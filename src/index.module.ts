@@ -2,16 +2,18 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { IndexController } from './index.controller';
+import { IndexService } from './index.service';
 import { typeOrmModuleOptions } from './ormconfig';
+import { AppModule } from './modules/app/app.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeOrmModuleOptions),
+    AppModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [IndexController],
+  providers: [IndexService],
 })
-export class AppModule {}
+export class IndexModule {}

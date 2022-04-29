@@ -12,6 +12,8 @@ export class CreateTranslationsTable1649860885933
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'language',

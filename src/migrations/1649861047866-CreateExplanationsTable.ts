@@ -17,6 +17,8 @@ export class CreateExplanationsTable1649861047866
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'explanation_position',

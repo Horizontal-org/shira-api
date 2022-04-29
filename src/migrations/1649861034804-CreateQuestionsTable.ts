@@ -15,6 +15,8 @@ export class CreateQuestionsTable1649861034804 implements MigrationInterface {
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'feedback_positive',

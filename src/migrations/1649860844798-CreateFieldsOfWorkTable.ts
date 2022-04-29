@@ -12,6 +12,8 @@ export class CreateFieldsOfWorkTable1649860844798
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'type',

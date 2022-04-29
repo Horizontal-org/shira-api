@@ -17,6 +17,8 @@ export class CreateMessageTypesTable1649860825501
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'type',
