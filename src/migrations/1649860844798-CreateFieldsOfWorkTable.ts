@@ -16,7 +16,7 @@ export class CreateFieldsOfWorkTable1649860844798
             generationStrategy: 'increment',
           },
           {
-            name: 'type',
+            name: 'name',
             type: 'varchar',
           },
           {

@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   dev:
-    container_name: nophish-api-dev
-    image: nophish-api-dev:1.0.0
+    container_name: shira-api-dev
+    image: shira-api-dev:1.0.0
     build:
         context: .
         target: development
@@ -19,8 +19,8 @@ services:
         - /usr/src/app/node_modules
     restart: unless-stopped
   prod:
-    container_name: nophish-api-prod
-    image: nestjs-api-prod:1.0.0
+    container_name: shira-api-prod
+    image: shira-api-prod:1.0.0
     build:
         context: .
         target: production

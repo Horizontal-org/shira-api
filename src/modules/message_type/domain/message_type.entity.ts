@@ -1,27 +1,31 @@
-import { MessageType } from 'src/modules/message_type/domain/message_type.entity';
+import { App } from 'src/modules/app/domain';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
-  OneToMany,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 
-@Entity({ name: 'apps' })
-export class App {
+@Entity({ name: 'message_types' })
+export class MessageType {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ length: 150 })
   name: string;
 
-  @OneToMany(() => MessageType, (messageType: MessageType) => messageType.app, {
+  @Column({ length: 150 })
+  slug: string;
+
+  @ManyToOne(() => App, (app: App) => app.messageTypes, {
+    eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'app_id' })
-  messageTypes: MessageType[];
+  app: App;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

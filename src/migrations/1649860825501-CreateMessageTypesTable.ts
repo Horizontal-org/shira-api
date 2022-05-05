@@ -21,7 +21,7 @@ export class CreateMessageTypesTable1649860825501
             generationStrategy: 'increment',
           },
           {
-            name: 'type',
+            name: 'name',
             type: 'varchar',
           },
           {
