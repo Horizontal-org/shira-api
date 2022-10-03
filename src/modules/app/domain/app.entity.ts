@@ -1,4 +1,5 @@
 import { MessageType } from 'src/modules/message_type/domain/message_type.entity';
+import { Question } from 'src/modules/question/domain/question.entity';
 import {
   Entity,
   Column,
@@ -7,6 +8,8 @@ import {
   CreateDateColumn,
   OneToMany,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity({ name: 'apps' })
@@ -17,11 +20,19 @@ export class App {
   @Column({ length: 150 })
   name: string;
 
-  @OneToMany(() => MessageType, (messageType: MessageType) => messageType.app, {
-    onDelete: 'CASCADE',
+  @ManyToMany(() => Question, question => question.apps)
+  @JoinTable({
+    name: 'apps_questions',
+    joinColumn: {
+      name: 'app_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'question_id',
+      referencedColumnName: 'id',
+    }
   })
-  @JoinColumn({ name: 'app_id' })
-  messageTypes: MessageType[];
+  questions: Question[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

@@ -5,11 +5,13 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class CreateQuestionsTable1649861034804 implements MigrationInterface {
+export class CreateAppsQuestionsTable1649861047866
+  implements MigrationInterface
+{
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'questions',
+        name: 'apps_questions',
         columns: [
           {
             name: 'id',
@@ -18,16 +20,12 @@ export class CreateQuestionsTable1649861034804 implements MigrationInterface {
             isGenerated: true,
             generationStrategy: 'increment',
           },
-          {
-            name: 'is_phising',
+         {
+            name: 'app_id',
             type: 'int',
-          },          
-          {
-            name: 'content',
-            type: 'text',
           },
           {
-            name: 'field_of_work_id',
+            name: 'question_id',
             type: 'int',
           },
           {
@@ -45,24 +43,19 @@ export class CreateQuestionsTable1649861034804 implements MigrationInterface {
       true,
     );
 
-    await queryRunner.createForeignKey(
-      'questions',
-      new TableForeignKey({
-        columnNames: ['field_of_work_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'fields_of_work',
-        onDelete: 'CASCADE',
-      }),
-    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable('questions');
-    const fieldOfWorkForeignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('field_of_work_id') !== -1,
+    const table = await queryRunner.getTable('apps_questions');
+    const appForeignKey = table.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf('app_id') !== -1,
+    );
+    const questionForeignKey = table.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf('question_id') !== -1,
     );
 
-    await queryRunner.dropForeignKey('questions', fieldOfWorkForeignKey);
-    await queryRunner.dropTable('questions');
+    await queryRunner.dropForeignKey('apps_questions', appForeignKey);
+    await queryRunner.dropForeignKey('apps_questions', questionForeignKey);
+    await queryRunner.dropTable('apps_questions');
   }
 }

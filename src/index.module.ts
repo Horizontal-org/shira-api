@@ -7,6 +7,7 @@ import { IndexService } from './index.service';
 import { typeOrmModuleOptions } from './ormconfig';
 import { AppModule } from './modules/app/app.module';
 import { FieldOfWorkModule } from './modules/field_of_work/field_of_work.module'
+import { QuestionModule } from './modules/question/question.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { FieldOfWorkModule } from './modules/field_of_work/field_of_work.module'
     TypeOrmModule.forRoot(typeOrmModuleOptions),
     AppModule,
     FieldOfWorkModule,
+    QuestionModule
   ],
   controllers: [IndexController],
   providers: [IndexService],

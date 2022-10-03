@@ -29,22 +29,22 @@ export class MessageTypeSeederService {
     const whatsappApp = await this.appRepository.findOne({ name: 'Whatsapp' });
     const gmailApp = await this.appRepository.findOne({ name: 'Gmail' });
 
-    await this.messageTypeRepository.save([
-      {
-        name: 'Job offer',
-        slug: 'job-offer',
-        app: whatsappApp,
-      },
-      {
-        name: 'Grandmother',
-        slug: 'grandmother',
-        app: whatsappApp,
-      },
-      {
-        name: 'Loan approval',
-        slug: 'loan-approval',
-        app: gmailApp,
-      },
-    ]);
+    // await this.messageTypeRepository.save([
+    //   {
+    //     name: 'Job offer',
+    //     slug: 'job-offer',
+    //     app: whatsappApp,
+    //   },
+    //   {
+    //     name: 'Grandmother',
+    //     slug: 'grandmother',
+    //     app: whatsappApp,
+    //   },
+    //   {
+    //     name: 'Loan approval',
+    //     slug: 'loan-approval',
+    //     app: gmailApp,
+    //   },
+    // ]);
   }
 }

@@ -8,13 +8,12 @@ export class Seeder {
   constructor(
     private readonly logger: Logger,
     private readonly appSeederService: AppSeederService,
-    private readonly messageTypeSeederService: MessageTypeSeederService,
     private readonly fieldOfWorkSeederService: FieldOfWorkSeederService,
   ) {}
   async seed() {
     const list = {
       app: this.appSeederService,
-      messageType: this.messageTypeSeederService,
+      // messageType: this.messageTypeSeederService,
       fieldOfWork: this.fieldOfWorkSeederService,
     };
 

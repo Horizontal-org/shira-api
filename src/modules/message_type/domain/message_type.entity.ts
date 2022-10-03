@@ -20,13 +20,6 @@ export class MessageType {
   @Column({ length: 150 })
   slug: string;
 
-  @ManyToOne(() => App, (app: App) => app.messageTypes, {
-    eager: true,
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'app_id' })
-  app: App;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
