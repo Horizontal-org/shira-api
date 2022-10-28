@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Inject, ParseArrayPipe, ParseIntPipe, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from '../domain';
@@ -11,8 +11,20 @@ export class ListQuestionController {
   ) {}
 
   @Get('')
-  async handler() {
-    const response = this.questionRepository.find()
+  async handler(@Query('apps', new ParseArrayPipe({ optional: true })) apps = []) {
+
+    const query = this.questionRepository
+      .createQueryBuilder('question')
+      .leftJoinAndSelect("question.apps", "apps")
+      .leftJoinAndSelect("question.explanations", "explanations")
+      .take(10)
+      
+    if (apps.length > 0) {
+      query.where('apps.id IN(:...ids)', {ids: apps})
+    }
+    const response = await query.getMany()
+
+
     return response;
   }
 }

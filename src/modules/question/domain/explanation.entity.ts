@@ -22,7 +22,7 @@ export class Explanation {
   text: string;
 
   @ManyToOne(() => Question, (question: Question) => question.explanations, {
-    eager: true,
+    // eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'question_id' })

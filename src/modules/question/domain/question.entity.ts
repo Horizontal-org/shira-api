@@ -21,6 +21,9 @@ export class Question {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
   content: string;
 
   @Column({ name: 'is_phising' })
@@ -48,7 +51,6 @@ export class Question {
   apps: App[];
 
   @OneToMany(() => Explanation, (explanation: Explanation) => explanation.question)
-  @JoinColumn({ name: 'question_id' })
   explanations: Explanation[];
 
   @CreateDateColumn({ name: 'created_at' })

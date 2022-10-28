@@ -19,6 +19,10 @@ export class CreateQuestionsTable1649861034804 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
+            name: 'name',
+            type: 'varchar',
+          },          
+          {
             name: 'is_phising',
             type: 'int',
           },          

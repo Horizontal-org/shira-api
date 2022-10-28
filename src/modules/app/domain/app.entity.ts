@@ -20,15 +20,18 @@ export class App {
   @Column({ length: 150 })
   name: string;
 
+  @Column({ length: 150 })
+  type: string;
+
   @ManyToMany(() => Question, question => question.apps)
   @JoinTable({
     name: 'apps_questions',
     joinColumn: {
-      name: 'app_id',
+      name: 'question_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: 'question_id',
+      name: 'app_id',
       referencedColumnName: 'id',
     }
   })

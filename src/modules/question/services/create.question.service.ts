@@ -27,6 +27,7 @@ export class CreateQuestionService {
     const appEntities =  await this.appRepo.find({where: { id: In(newQuestion.question.apps) }})
 
     const question = new Question()
+    question.name = newQuestion.question.name
     question.content = newQuestion.question.content
     question.isPhising = newQuestion.question.isPhishing
     question.apps = appEntities
@@ -41,7 +42,7 @@ export class CreateQuestionService {
         }
       }))
 
-      await this.explanationRepo.insert(explanations)
+      await this.explanationRepo.save(explanations)
     }
   }
 }

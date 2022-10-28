@@ -25,9 +25,15 @@ export class AppSeederService {
     await this.appRepository.save([
       {
         name: 'Gmail',
+        type: 'email'
       },
       {
         name: 'Whatsapp',
+        type: 'messaging'
+      },
+      {
+        name: 'SMS',
+        type: 'messaging'
       },
     ]);
   }

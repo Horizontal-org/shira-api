@@ -1,5 +1,6 @@
 export class CreateQuestionDto {
   question: {
+    name: string;
     content: string;
     isPhishing: number;
     fieldOfWork?: string;
