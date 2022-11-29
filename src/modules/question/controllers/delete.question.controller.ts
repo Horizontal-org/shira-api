@@ -1,9 +1,10 @@
 import { Controller, Delete, Get, Inject, Param, ParseArrayPipe, ParseIntPipe, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthController } from 'src/utils/decorators/auth-controller.decorator';
 import { Repository } from 'typeorm';
 import { Question } from '../domain';
 
-@Controller('question')
+@AuthController('question')
 export class DeleteQuestionController {
   constructor(
     @InjectRepository(Question)

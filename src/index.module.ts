@@ -8,14 +8,20 @@ import { typeOrmModuleOptions } from './ormconfig';
 import { AppModule } from './modules/app/app.module';
 import { FieldOfWorkModule } from './modules/field_of_work/field_of_work.module'
 import { QuestionModule } from './modules/question/question.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { ConsoleModule } from 'nestjs-console';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeOrmModuleOptions),
     AppModule,
+    ConsoleModule,
     FieldOfWorkModule,
-    QuestionModule
+    QuestionModule,
+    UserModule,
+    AuthModule
   ],
   controllers: [IndexController],
   providers: [IndexService],

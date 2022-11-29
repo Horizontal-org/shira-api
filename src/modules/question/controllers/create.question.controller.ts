@@ -5,8 +5,9 @@ import { CreateQuestionDto } from '../dto/create.question.dto';
 import { Question } from '../domain';
 import { App } from 'src/modules/app/domain';
 import { CreateQuestionService } from '../services/create.question.service';
+import { AuthController } from 'src/utils/decorators/auth-controller.decorator';
 
-@Controller('question')
+@AuthController('question')
 export class CreateQuestionController {
   constructor(
     private createQuestionService: CreateQuestionService
