@@ -11,6 +11,7 @@ import { QuestionModule } from './modules/question/question.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConsoleModule } from 'nestjs-console';
+import { SurveyModule } from './modules/survey/survey.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { ConsoleModule } from 'nestjs-console';
     FieldOfWorkModule,
     QuestionModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    SurveyModule
   ],
   controllers: [IndexController],
   providers: [IndexService],
