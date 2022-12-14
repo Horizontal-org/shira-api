@@ -27,7 +27,7 @@ pipeline {
         steps {
           script {
             sh '''            
-              ssh -o StrictHostKeyChecking=no root@shira.wearehorizontal.org "cd /home/shira-staging/shira-api ; docker-compose exec prod npm run typeorm migration:run"
+              ssh -o StrictHostKeyChecking=no root@shira.wearehorizontal.org "cd /home/shira-staging/shira-api ; docker-compose exec -it prod npm run typeorm migration:run"
             '''
           }
         }
