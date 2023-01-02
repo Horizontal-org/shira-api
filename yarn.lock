@@ -584,9 +584,9 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@nestjs/cli@^8.0.0":
+"@nestjs/cli@^8.2.5":
   version "8.2.5"
-  resolved "https://registry.npmjs.org/@nestjs/cli/-/cli-8.2.5.tgz"
+  resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-8.2.5.tgz#02094177f4eac576d1a559b259d541393e49e0bb"
   integrity sha512-b5DzZ08q/6iWvLz+n2DhEyZ3rsOurN1ec1jYQaWC5DCVQoZCwyOew48bVf01kevTK4eZyQxPwuErf7HnFAc0oQ==
   dependencies:
     "@angular-devkit/core" "13.3.2"
@@ -5331,9 +5331,9 @@ tsconfig-paths-webpack-plugin@3.5.2:
     enhanced-resolve "^5.7.0"
     tsconfig-paths "^3.9.0"
 
-tsconfig-paths@3.14.1, tsconfig-paths@^3.10.1, tsconfig-paths@^3.9.0:
+tsconfig-paths@3.14.1, tsconfig-paths@^3.14.1, tsconfig-paths@^3.9.0:
   version "3.14.1"
-  resolved "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz#ba0734599e8ea36c862798e920bcf163277b137a"
   integrity sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==
   dependencies:
     "@types/json5" "^0.0.29"
