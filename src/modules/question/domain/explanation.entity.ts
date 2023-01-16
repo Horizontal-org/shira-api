@@ -15,6 +15,9 @@ export class Explanation {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ name: 'explanation_index', length: 150 })
+  index: string;
+
   @Column({ name: 'explanation_position', length: 150 })
   position: string;
 
