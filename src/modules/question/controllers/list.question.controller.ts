@@ -24,10 +24,6 @@ export class ListQuestionController {
       .leftJoinAndSelect('question.explanations', 'explanations')
       .take(10);
 
-    console.log(
-      '🚀 ~ file: list.question.controller.ts:23 ~ ListQuestionController ~ handler ~ apps',
-      apps,
-    );
     if (apps.length > 0) {
       query.where('apps.id IN(:...ids)', { ids: apps });
     }

@@ -8,6 +8,7 @@ export class CreateQuestionDto {
   }
   explanations?: {
     position: string;
+    index: string;
     text: string;
   }[]
 }
