@@ -23,15 +23,18 @@ export class CreateQuestionService {
   ) {}
 
   async create (newQuestion: CreateQuestionDto) {
+    console.log("🚀 ~ file: create.question.service.ts:26 ~ CreateQuestionService ~ create ~ newQuestion:", newQuestion)
     
     const appEntities =  await this.appRepo.find({where: { id: In(newQuestion.question.apps) }})
-
+    const fieldOfWork = await this.fieldOfWorkRepo.findOne({ where: { id: newQuestion.question.fieldOfWork }})
+    console.log("🚀 ~ file: create.question.service.ts:30 ~ CreateQuestionService ~ create ~ fieldOfWork:", fieldOfWork)
+    
     const question = new Question()
     question.name = newQuestion.question.name
     question.content = newQuestion.question.content
     question.isPhising = newQuestion.question.isPhishing
     question.apps = appEntities
-    question.fieldOfWork = await this.fieldOfWorkRepo.findOne()
+    question.fieldOfWork = fieldOfWork
     const saved = await this.questionRepo.save(question)
     
     if (newQuestion.explanations && newQuestion.explanations.length > 0) {

@@ -6,7 +6,10 @@ import { Explanation as ExplanationEntity } from '../question/domain'
 import { questionControllers } from './controllers';
 
 import { Question as QuestionEntity } from './domain';
+
+// services
 import { CreateQuestionService } from './services/create.question.service';
+import { GenerateQuizQuestionService } from './services/quiz.question.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
@@ -16,6 +19,9 @@ import { CreateQuestionService } from './services/create.question.service';
     ExplanationEntity
   ])],
   controllers: [...questionControllers],
-  providers: [CreateQuestionService]
+  providers: [
+    CreateQuestionService,
+    GenerateQuizQuestionService
+  ]
 })
 export class QuestionModule {}

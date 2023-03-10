@@ -36,6 +36,9 @@ export class Question {
   @JoinColumn({name: 'field_of_work_id'})
   fieldOfWork: FieldOfWork;
 
+  @Column({ name: 'field_of_work_id'})
+  fieldOfWorkId: Number;
+
   @ManyToMany(() => App, app => app.questions)
   @JoinTable({
     name: 'apps_questions',
