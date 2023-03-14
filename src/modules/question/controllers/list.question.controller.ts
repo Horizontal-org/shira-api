@@ -1,4 +1,4 @@
-import { Controller, Get, ParseArrayPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseArrayPipe, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from '../domain';
@@ -30,5 +30,17 @@ export class ListQuestionController {
     const response = await query.getMany();
 
     return response;
+  }
+
+  @Get(':id')
+  async getQuestion(@Param('id') id: string) {
+    const query = this.questionRepository
+      .createQueryBuilder('question')
+      .leftJoinAndSelect('question.apps', 'apps')
+      .leftJoinAndSelect('question.explanations', 'explanations')
+      .where('question.id = :id', { id });
+
+    const res = await query.getOne();
+    return res;
   }
 }
