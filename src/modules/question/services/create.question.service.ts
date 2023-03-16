@@ -22,9 +22,11 @@ export class CreateQuestionService {
 
   async create(newQuestion: CreateQuestionDto, id?: string) {
     let question: Question;
+    const fieldOfWork = await this.fieldOfWorkRepo.findOne({ where: { id: newQuestion.question.fieldOfWork }})
     const appEntities = await this.appRepo.find({
       where: { id: In(newQuestion.question.apps) },
     });
+
     if (id) {
       question = await this.questionRepo.findOne({
         where: { id },
@@ -36,7 +38,7 @@ export class CreateQuestionService {
     question.content = newQuestion.question.content;
     question.isPhising = newQuestion.question.isPhishing;
     question.apps = appEntities;
-    question.fieldOfWork = await this.fieldOfWorkRepo.findOne();
+    question.fieldOfWork = fieldOfWork
     const saved = await this.questionRepo.save(question);
 
     if (newQuestion.explanations && newQuestion.explanations.length > 0) {
