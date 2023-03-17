@@ -1,14 +1,14 @@
-import { Body, Post } from '@nestjs/common';
+import { Body, Param, Patch } from '@nestjs/common';
 import { CreateQuestionDto } from '../dto/create.question.dto';
 import { CreateQuestionService } from '../services/create.question.service';
 import { AuthController } from 'src/utils/decorators/auth-controller.decorator';
 
 @AuthController('question')
-export class CreateQuestionController {
+export class EditQuestionController {
   constructor(private createQuestionService: CreateQuestionService) {}
 
-  @Post('')
-  async handler(@Body() newQuestion: CreateQuestionDto) {
-    this.createQuestionService.create(newQuestion);
+  @Patch(':id')
+  async handler(@Param('id') id: string, @Body() question: CreateQuestionDto) {
+    this.createQuestionService.create(question, id);
   }
 }
