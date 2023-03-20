@@ -5,10 +5,10 @@ import { QuizQuestionController } from './quiz.question.controller'
 import { EditQuestionController } from './edit.question.controller'
 
 export const questionControllers = [
+  QuizQuestionController,
   CreateQuestionController,
   ListQuestionController,
   DeleteQuestionController,
   EditQuestionController,
-  QuizQuestionController
 ]
 
