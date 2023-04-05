@@ -21,9 +21,6 @@ import { GenerateQuizQuestionService } from './services/quiz.question.service';
     ]),
   ],
   controllers: [...questionControllers],
-  providers: [
-    CreateQuestionService,
-    GenerateQuizQuestionService
-  ]
+  providers: [CreateQuestionService, GenerateQuizQuestionService],
 })
 export class QuestionModule {}
