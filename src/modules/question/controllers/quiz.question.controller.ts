@@ -6,23 +6,27 @@ import { GenerateQuizQuestionService } from '../services/quiz.question.service';
 
 @Controller('question')
 export class QuizQuestionController {
-  constructor(
-    private generateQuizService: GenerateQuizQuestionService
-  ) {}
+  constructor(private generateQuizService: GenerateQuizQuestionService) {}
 
   @Get('quiz')
   async handler(
     @Query(
       'apps',
       new ParseArrayPipe({ items: Number, separator: ',', optional: true }),
-    ) apps = [],
+    )
+    apps = [],
     @Query(
       'fieldsOfWork',
       new ParseArrayPipe({ items: Number, separator: ',', optional: true }),
-      ) fieldsOfWork = [],
-    ) 
-  {
-    const res = await this.generateQuizService.generate(apps, fieldsOfWork)      
-    return res
+    )
+    fieldsOfWork = [],
+    @Query('lang') lang = 1,
+  ) {
+    const res = await this.generateQuizService.generate(
+      apps,
+      fieldsOfWork,
+      lang,
+    );
+    return res;
   }
 }
