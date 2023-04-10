@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { QuestionTranslation } from '../../translation/domain/questionTranslation.entity';
+import { ExplanationTranslation } from '../../translation/domain/explanationTranslation.entity';
 
 @Entity()
 export class Language {
@@ -23,4 +24,11 @@ export class Language {
     (questionTranslation: QuestionTranslation) => questionTranslation.question,
   )
   questionTranslations: QuestionTranslation[];
+
+  @OneToMany(
+    () => ExplanationTranslation,
+    (explanationTranslation: ExplanationTranslation) =>
+      explanationTranslation.explanation,
+  )
+  explanationTranslations: ExplanationTranslation[];
 }

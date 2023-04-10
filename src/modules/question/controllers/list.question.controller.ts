@@ -43,37 +43,51 @@ export class ListQuestionController {
   }
 
   @Get(':id')
-  async getQuestion(@Param('id') id: string) {
+  async getQuestion(@Param('id') id: string, @Query('lang') lang: number) {
+    const languageId = lang || 1;
     const query = this.questionRepository
       .createQueryBuilder('question')
       .leftJoin('question.apps', 'apps')
       .leftJoin('question.explanations', 'explanations')
       .leftJoin('question.questionTranslations', 'questionTranslations')
+      .leftJoin(
+        'explanations.explanationTranslations',
+        'explanationTranslations',
+        'explanations.id = explanationTranslations.explanation_id AND explanationTranslations.language_id = :languageId',
+        { languageId },
+      )
       .select([
         'question.id',
         'question.name',
         'question.isPhising',
         'question.fieldOfWorkId',
         'apps',
-        'questionTranslations.content',
         'explanations.id',
         'explanations.index',
         'explanations.position',
         'explanations.createdAt',
-        'explanations.text',
         'explanations.updatedAt',
+        'questionTranslations.content',
+        'explanationTranslations.content',
       ])
       .where('question.id = :id', { id })
       .andWhere('questionTranslations.languageId = :languageId', {
-        languageId: 1,
+        languageId,
       });
 
-    const res = await query.getOne();
+    const res = (await query.getMany()).shift();
+
     console.log(res);
+
+    if (!res) return null;
 
     const parsedQuestion = {
       ...res,
       content: res.questionTranslations[0].content,
+      explanations: res.explanations.map((explanation) => ({
+        ...explanation,
+        text: explanation.explanationTranslations[0].content,
+      })),
     };
     return parsedQuestion;
   }
