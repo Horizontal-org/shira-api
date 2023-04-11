@@ -86,7 +86,7 @@ export class ListQuestionController {
       content: res.questionTranslations[0].content,
       explanations: res.explanations.map((explanation) => ({
         ...explanation,
-        text: explanation.explanationTranslations[0].content,
+        text: explanation.explanationTranslations[0]?.content,
       })),
     };
     return parsedQuestion;

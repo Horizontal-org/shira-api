@@ -24,9 +24,15 @@ export class ExplanationTranslation {
   @JoinColumn({ name: 'explanation_id' })
   explanation: Explanation;
 
-  @ManyToOne(() => Language, { onDelete: 'CASCADE' })
-  language: Language;
-  @Column({ name: 'language_id' })
+  @ManyToOne(
+    () => Language,
+    (language: Language) => language.explanationTranslations,
+    {
+      // eager: true,
+      onDelete: 'CASCADE',
+    },
+  )
+  @JoinColumn({ name: 'language_id' })
   languageId: number;
 
   @Column('text')

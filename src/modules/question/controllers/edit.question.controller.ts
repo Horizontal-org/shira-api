@@ -9,6 +9,7 @@ export class EditQuestionController {
 
   @Patch(':id')
   async handler(@Param('id') id: string, @Body() question: CreateQuestionDto) {
-    this.createQuestionService.create(question, id);
+    const langId = 1;
+    this.createQuestionService.create(question, id, langId);
   }
 }

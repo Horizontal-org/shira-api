@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { QuestionTranslation } from '../../translation/domain/questionTranslation.entity';
 import { ExplanationTranslation } from '../../translation/domain/explanationTranslation.entity';
 
-@Entity()
+@Entity({ name: 'languages' })
 export class Language {
   @PrimaryGeneratedColumn()
   id: number;

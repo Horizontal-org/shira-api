@@ -9,6 +9,7 @@ export class CreateQuestionController {
 
   @Post('')
   async handler(@Body() newQuestion: CreateQuestionDto) {
-    this.createQuestionService.create(newQuestion);
+    const lang = 1;
+    this.createQuestionService.create(newQuestion, null, lang);
   }
 }

@@ -4,7 +4,9 @@ import { App as AppEntity } from '../app/domain';
 import { FieldOfWork as FieldOfWorkEntity } from '../field_of_work/domain';
 import { Explanation as ExplanationEntity } from '../question/domain';
 import { questionControllers } from './controllers';
-
+import { QuestionTranslation } from '../translation/domain/questionTranslation.entity';
+import { ExplanationTranslation as ExplanationTranslationEntity } from '../translation/domain/explanationTranslation.entity';
+import { Language as LanguageEntity } from '../languages/domain';
 import { Question as QuestionEntity } from './domain';
 
 // services
@@ -18,6 +20,9 @@ import { GenerateQuizQuestionService } from './services/quiz.question.service';
       AppEntity,
       FieldOfWorkEntity,
       ExplanationEntity,
+      QuestionTranslation,
+      ExplanationTranslationEntity,
+      LanguageEntity,
     ]),
   ],
   controllers: [...questionControllers],
