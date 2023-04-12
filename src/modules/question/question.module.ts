@@ -12,7 +12,7 @@ import { Question as QuestionEntity } from './domain';
 // services
 import { CreateQuestionService } from './services/create.question.service';
 import { GenerateQuizQuestionService } from './services/quiz.question.service';
-
+import { ParserQuestionService } from './services/individualParser.question.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -26,6 +26,10 @@ import { GenerateQuizQuestionService } from './services/quiz.question.service';
     ]),
   ],
   controllers: [...questionControllers],
-  providers: [CreateQuestionService, GenerateQuizQuestionService],
+  providers: [
+    CreateQuestionService,
+    GenerateQuizQuestionService,
+    ParserQuestionService,
+  ],
 })
 export class QuestionModule {}
