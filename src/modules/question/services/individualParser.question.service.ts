@@ -106,6 +106,5 @@ export class ParserQuestionService {
     fs.unlinkSync(filePath);
 
     return { message: 'Question translation imported successfully' };
-    s;
   }
 }
