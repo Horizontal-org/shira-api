@@ -3,12 +3,12 @@ import {
   Param,
   Post,
   Res,
-  UploadedFile,
+  UploadedFiles,
   Body,
   UseInterceptors,
 } from '@nestjs/common';
 
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { AuthController } from 'src/utils/decorators/auth-controller.decorator';
 
 import { ParserQuestionService } from '../services/individualParser.question.service';
@@ -26,12 +26,9 @@ export class ParserQuestionController {
   }
 
   @Post(':id/import')
-  @UseInterceptors(FileInterceptor('file'))
-  async import(
-    @UploadedFile() file,
-    @Body() body: { id: string; lang: number },
-  ) {
-    const { id, lang } = body;
-    this.parserQuestionService.import({ id, lang, file });
+  @UseInterceptors(FilesInterceptor('files'))
+  async import(@UploadedFiles() files, @Body() body: { id: string }) {
+    const { id } = body;
+    this.parserQuestionService.import({ id, files });
   }
 }
