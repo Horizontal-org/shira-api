@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Question } from '../domain';
 import { QuestionTranslation } from 'src/modules/translation/domain/questionTranslation.entity';
 import { ExplanationTranslation } from 'src/modules/translation/domain/explanationTranslation.entity';
+import { Language } from 'src/modules/languages/domain';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as cheerio from 'cheerio';
@@ -17,10 +18,15 @@ export class ParserQuestionService {
     private readonly QuestionTranslationRepository: Repository<QuestionTranslation>,
     @InjectRepository(ExplanationTranslation)
     private readonly ExplanationTranslationRepository: Repository<ExplanationTranslation>,
+    @InjectRepository(Language)
+    private readonly languageRepository: Repository<Language>,
   ) {}
   // createOrUpdateQuestion
   async export({ id, lang, res }) {
-    const languageId = lang || 1;
+    const { id: languageId } = await this.languageRepository.findOne({
+      where: { code: lang || 'en' },
+    });
+
     const query = this.questionRepository
       .createQueryBuilder('question')
       .leftJoin('question.explanations', 'explanations')
@@ -45,6 +51,10 @@ export class ParserQuestionService {
 
     const resData = await query.getOne();
 
+    if (!resData) {
+      return res.status(404).send('Question not found');
+    }
+
     const explanations = resData.explanations.map(
       (explanation) =>
         `<div data-explanation-id='${explanation.id}'>${explanation.explanationTranslations[0].content}</div>`,
@@ -55,7 +65,7 @@ export class ParserQuestionService {
 
     const questionTranslationContent = resData.questionTranslations[0].content;
 
-    const fileName = `question_${id}_translation_${languageId}.html`;
+    const fileName = `question_${id}_translation_${lang}.html`;
     const filePath = path.join(__dirname, '..', fileName);
     fs.writeFile(
       filePath,
@@ -83,10 +93,19 @@ export class ParserQuestionService {
     );
   }
 
-  async import({ id, files }) {
+  async import({ id, files, res }) {
     for (const file of files) {
       const fileName = file.originalname;
-      const lang = fileName.split('_')[3].split('.')[0];
+      const langCode = fileName.split('_')[3].split('.')[0];
+      const { id: lang } = await this.languageRepository
+        .findOneOrFail({
+          where: { code: langCode },
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(404).send('Language not found');
+        });
+      console.log(lang);
       const filePath = path.join(__dirname, '..', fileName);
 
       // Save the uploaded file to the server
@@ -170,6 +189,8 @@ export class ParserQuestionService {
         }
         fs.unlinkSync(filePath);
       }
+
+      return res.status(200).send('Question translation imported successfully');
     }
   }
 }

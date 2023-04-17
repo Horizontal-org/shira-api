@@ -19,7 +19,7 @@ export class ParserQuestionController {
   @Get(':id/export/:lang')
   async export(
     @Param('id') id: string,
-    @Param('lang') lang: number,
+    @Param('lang') lang: string,
     @Res() res,
   ) {
     this.parserQuestionService.export({ id, lang, res });
@@ -27,8 +27,12 @@ export class ParserQuestionController {
 
   @Post(':id/import')
   @UseInterceptors(FilesInterceptor('files'))
-  async import(@UploadedFiles() files, @Body() body: { id: string }) {
+  async import(
+    @UploadedFiles() files,
+    @Body() body: { id: string },
+    @Res() res,
+  ) {
     const { id } = body;
-    this.parserQuestionService.import({ id, files });
+    this.parserQuestionService.import({ id, files, res });
   }
 }

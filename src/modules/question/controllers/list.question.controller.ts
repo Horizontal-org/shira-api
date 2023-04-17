@@ -2,12 +2,15 @@ import { Controller, Get, Param, ParseArrayPipe, Query } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from '../domain';
+import { Language } from 'src/modules/languages/domain';
 
 @Controller('question')
 export class ListQuestionController {
   constructor(
     @InjectRepository(Question)
     private readonly questionRepository: Repository<Question>,
+    @InjectRepository(Language)
+    private readonly languageRepository: Repository<Language>,
   ) {}
 
   @Get('')
@@ -43,8 +46,11 @@ export class ListQuestionController {
   }
 
   @Get(':id')
-  async getQuestion(@Param('id') id: string, @Query('lang') lang: number) {
-    const languageId = lang || 1;
+  async getQuestion(@Param('id') id: string, @Query('lang') lang: string) {
+    // find language by code
+    const { id: languageId } = await this.languageRepository.findOne({
+      where: { code: lang || 'es' },
+    });
     const query = this.questionRepository
       .createQueryBuilder('question')
       .leftJoin('question.apps', 'apps')
