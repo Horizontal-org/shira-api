@@ -49,7 +49,7 @@ export class ListQuestionController {
   async getQuestion(@Param('id') id: string, @Query('lang') lang: string) {
     // find language by code
     const { id: languageId } = await this.languageRepository.findOne({
-      where: { code: lang || 'es' },
+      where: { code: lang || 'en' },
     });
     const query = this.questionRepository
       .createQueryBuilder('question')
