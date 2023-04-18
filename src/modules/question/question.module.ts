@@ -13,6 +13,7 @@ import { Question as QuestionEntity } from './domain';
 import { CreateQuestionService } from './services/create.question.service';
 import { GenerateQuizQuestionService } from './services/quiz.question.service';
 import { ParserQuestionService } from './services/individualParser.question.service';
+import { GlobalParserQuestionService } from './services/globalParser.question.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -30,6 +31,7 @@ import { ParserQuestionService } from './services/individualParser.question.serv
     CreateQuestionService,
     GenerateQuizQuestionService,
     ParserQuestionService,
+    GlobalParserQuestionService,
   ],
 })
 export class QuestionModule {}
