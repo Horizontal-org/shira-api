@@ -125,7 +125,9 @@ export class ParserQuestionService {
         });
       });
       $('#explanations').remove();
-      const questionTranslationContent = $('body').html();
+      const questionTranslationContent = $('body')
+        .html()
+        .replace(/>\s+</g, '><');
       // find a questionTranslation with id as question is and lang. If does not exist create it
       const questionTranslated =
         await this.QuestionTranslationRepository.findOne({

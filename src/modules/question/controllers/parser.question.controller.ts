@@ -29,7 +29,7 @@ export class ParserQuestionController {
     this.parserQuestionService.export({ id, lang, res });
   }
 
-  @Get(':id/global-export/:lang')
+  @Get('/global-export/:lang')
   async globalExport(
     @Param('id') id: string,
     @Param('lang') lang: string,
@@ -47,5 +47,11 @@ export class ParserQuestionController {
   ) {
     const { id } = body;
     this.parserQuestionService.import({ id, files, res });
+  }
+
+  @Post('/global-import')
+  @UseInterceptors(FilesInterceptor('files'))
+  async globalImport(@UploadedFiles() files, @Res() res) {
+    this.globalParserQuestionService.import({ files, res });
   }
 }

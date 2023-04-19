@@ -56,7 +56,7 @@ export class GlobalParserQuestionService {
       return res.status(404).send('Question not found');
     }
 
-    const $ = cheerio.load('<div></div>');
+    const $ = cheerio.load(`<div id='questions'></div>`);
 
     const questionDivs = resData.map((question) => {
       const questionDiv = $(`<div data-question-id='${question.id}'></div>`);
@@ -110,5 +110,104 @@ export class GlobalParserQuestionService {
         });
       }
     });
+  }
+
+  async import({ files, res }) {
+    for (const file of files) {
+      const fileName = file.originalname;
+      const langCode = fileName.split('_')[3].split('.')[0];
+      console.log(langCode);
+      const { id: languageId } = await this.languageRepository.findOne({
+        where: { code: langCode },
+      });
+
+      const filePath = path.join(__dirname, '..', fileName);
+      fs.writeFileSync(filePath, file.buffer);
+
+      const fileContents = fs.readFileSync(filePath, 'utf8');
+
+      const $ = cheerio.load(fileContents);
+
+      const questions = $('div[data-question-id]');
+      for (const question of questions) {
+        const questionId = $(question).attr('data-question-id');
+        const questionContent = $(question)
+          .find('div')
+          .html()
+          .replace(/>\s+</g, '><');
+        console.log(questionContent);
+        const explanations = $(question).find('div#explanations > div');
+        // console.log('explanations', explanations);
+        const questionTranslated =
+          await this.QuestionTranslationRepository.findOne({
+            where: { question: questionId, languageId },
+          });
+
+        if (!questionTranslated) {
+          const questionTranslation = new QuestionTranslation();
+          questionTranslation.content = questionContent;
+          questionTranslation.languageId = languageId;
+          questionTranslation.question = questionId as any;
+          await this.QuestionTranslationRepository.save(questionTranslation);
+          console.log(`question ${questionId} created`);
+
+          //loop through explanations and create explanation translations
+          for (const explanation of explanations) {
+            const explanationId = $(explanation).attr('data-explanation-id');
+            const explanationContent = $(explanation).find('div').text();
+            const explanationTranslated =
+              await this.ExplanationTranslationRepository.findOne({
+                where: { explanation: explanationId, languageId },
+              });
+            if (!explanationTranslated) {
+              const explanationTranslation = new ExplanationTranslation();
+              explanationTranslation.content = explanationContent;
+              explanationTranslation.languageId = languageId;
+              explanationTranslation.explanation = explanationId as any;
+              await this.ExplanationTranslationRepository.save(
+                explanationTranslation,
+              );
+              console.log(`explanation ${explanationId} created`);
+            } else {
+              explanationTranslated.content = explanationContent;
+              await this.ExplanationTranslationRepository.save(
+                explanationTranslated,
+              );
+              console.log(`explanation ${explanationId} updated`);
+            }
+          }
+        } else {
+          questionTranslated.content = questionContent;
+          await this.QuestionTranslationRepository.save(questionTranslated);
+          console.log(`question ${questionId} updated`);
+          for (const explanation of explanations) {
+            const explanationId = $(explanation).attr('data-explanation-id');
+            const explanationContent = $(explanation).find('div').text();
+            const explanationTranslated =
+              await this.ExplanationTranslationRepository.findOne({
+                where: { explanation: explanationId, languageId },
+              });
+            if (!explanationTranslated) {
+              const explanationTranslation = new ExplanationTranslation();
+              explanationTranslation.content = explanationContent;
+              explanationTranslation.languageId = languageId;
+              explanationTranslation.explanation = explanationId as any;
+              await this.ExplanationTranslationRepository.save(
+                explanationTranslation,
+              );
+              console.log(`explanation ${explanationId} created`);
+            } else {
+              explanationTranslated.content = explanationContent;
+              await this.ExplanationTranslationRepository.save(
+                explanationTranslated,
+              );
+              console.log(`explanation ${explanationId} updated`);
+            }
+          }
+        }
+      }
+    }
+
+    return res.status(200).send('ok');
   }
 }
