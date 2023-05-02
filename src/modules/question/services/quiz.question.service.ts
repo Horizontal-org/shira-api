@@ -23,7 +23,7 @@ export class GenerateQuizQuestionService {
 
   async generate(apps, fieldsOfWork, lang: string) {
     const { id: languageId } = await this.languageRepository.findOne({
-      where: { code: lang || 'en' },
+      where: { code: lang || 'es' },
     });
     this.fieldsOfWorkIds = fieldsOfWork;
     this.apps = await this.appRepository.findByIds(apps);
