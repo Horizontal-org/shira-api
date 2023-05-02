@@ -7,8 +7,10 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Question } from './question.entity';
+import { ExplanationTranslation } from '../../translation/domain/explanationTranslation.entity';
 
 @Entity({ name: 'explanations' })
 export class Explanation {
@@ -31,6 +33,12 @@ export class Explanation {
   @JoinColumn({ name: 'question_id' })
   question: Question;
 
+  @OneToMany(
+    () => ExplanationTranslation,
+    (explanationTranslation: ExplanationTranslation) =>
+      explanationTranslation.explanation,
+  )
+  explanationTranslations: ExplanationTranslation[];
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

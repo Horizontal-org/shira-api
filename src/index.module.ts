@@ -6,8 +6,10 @@ import { IndexController } from './index.controller';
 import { IndexService } from './index.service';
 import { typeOrmModuleOptions } from './ormconfig';
 import { AppModule } from './modules/app/app.module';
-import { FieldOfWorkModule } from './modules/field_of_work/field_of_work.module'
+import { FieldOfWorkModule } from './modules/field_of_work/field_of_work.module';
 import { QuestionModule } from './modules/question/question.module';
+import { LanguageModule } from './modules/languages/language.module';
+import { TranslationModule } from './modules/translation/translation.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConsoleModule } from 'nestjs-console';
@@ -23,7 +25,9 @@ import { SurveyModule } from './modules/survey/survey.module';
     QuestionModule,
     UserModule,
     AuthModule,
-    SurveyModule
+    SurveyModule,
+    TranslationModule,
+    LanguageModule,
   ],
   controllers: [IndexController],
   providers: [IndexService],
