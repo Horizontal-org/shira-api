@@ -54,6 +54,7 @@ export class CreateQuestionService {
     question.apps = appEntities;
     question.fieldOfWork = fieldOfWork;
     question.languageId = langId;
+    question.content = ''
     const saved = await this.questionRepo.save(question);
 
     // create or update questionTranslation based on questionId and languageId

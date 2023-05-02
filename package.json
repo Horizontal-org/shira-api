@@ -43,7 +43,7 @@
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.0",
     "mysql2": "^2.3.3",
-    "nestjs-console": "^8.0.0",
+    "nestjs-console": "^7.0.1",
     "passport": "^0.6.0",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0",
