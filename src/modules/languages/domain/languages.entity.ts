@@ -21,14 +21,15 @@ export class Language {
 
   @OneToMany(
     () => QuestionTranslation,
-    (questionTranslation: QuestionTranslation) => questionTranslation.question,
+    (questionTranslation: QuestionTranslation) =>
+      questionTranslation.languageId,
   )
   questionTranslations: QuestionTranslation[];
 
   @OneToMany(
     () => ExplanationTranslation,
     (explanationTranslation: ExplanationTranslation) =>
-      explanationTranslation.explanation,
+      explanationTranslation.languageId,
   )
   explanationTranslations: ExplanationTranslation[];
 }

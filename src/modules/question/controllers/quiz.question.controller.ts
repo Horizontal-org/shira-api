@@ -20,7 +20,7 @@ export class QuizQuestionController {
       new ParseArrayPipe({ items: Number, separator: ',', optional: true }),
     )
     fieldsOfWork = [],
-    @Query('lang') lang = 1,
+    @Query('lang') lang?: string,
   ) {
     const res = await this.generateQuizService.generate(
       apps,

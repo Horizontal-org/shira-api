@@ -5,6 +5,7 @@ import { In, Repository } from 'typeorm';
 import { Question } from '../domain';
 import { Explanation } from '../domain/explanation.entity';
 import { CreateQuestionDto } from '../dto/create.question.dto';
+import { Language } from 'src/modules/languages/domain';
 
 @Injectable()
 export class GenerateQuizQuestionService {
@@ -16,9 +17,14 @@ export class GenerateQuizQuestionService {
     private readonly questionRepository: Repository<Question>,
     @InjectRepository(App)
     private readonly appRepository: Repository<App>,
+    @InjectRepository(Language)
+    private readonly languageRepository: Repository<Language>,
   ) {}
 
-  async generate(apps, fieldsOfWork, languageId) {
+  async generate(apps, fieldsOfWork, lang: string) {
+    const { id: languageId } = await this.languageRepository.findOne({
+      where: { code: lang || 'en' },
+    });
     this.fieldsOfWorkIds = fieldsOfWork;
     this.apps = await this.appRepository.findByIds(apps);
     const quizQuery = await this.questionRepository
