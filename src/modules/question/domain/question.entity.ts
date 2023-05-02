@@ -14,6 +14,8 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Explanation } from './explanation.entity';
+import { QuestionTranslation } from '../../translation/domain/questionTranslation.entity';
+import { Language } from 'src/modules/languages/domain';
 
 @Entity({ name: 'questions' })
 export class Question {
@@ -27,19 +29,26 @@ export class Question {
   content: string;
 
   @Column({ name: 'is_phising' })
-  isPhising: Number;
+  isPhising: number;
 
-  @ManyToOne(() => FieldOfWork, (fieldOfWork: FieldOfWork) => fieldOfWork.questions, {
-    eager: true,
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({name: 'field_of_work_id'})
+  @ManyToOne(
+    () => FieldOfWork,
+    (fieldOfWork: FieldOfWork) => fieldOfWork.questions,
+    {
+      eager: true,
+      onDelete: 'CASCADE',
+    },
+  )
+  @JoinColumn({ name: 'field_of_work_id' })
   fieldOfWork: FieldOfWork;
 
-  @Column({ name: 'field_of_work_id'})
-  fieldOfWorkId: Number;
+  @Column({ name: 'field_of_work_id' })
+  fieldOfWorkId: number;
 
-  @ManyToMany(() => App, app => app.questions)
+  @Column({ name: 'language_id' })
+  languageId: number;
+
+  @ManyToMany(() => App, (app) => app.questions)
   @JoinTable({
     name: 'apps_questions',
     joinColumn: {
@@ -49,12 +58,21 @@ export class Question {
     inverseJoinColumn: {
       name: 'app_id',
       referencedColumnName: 'id',
-    }
+    },
   })
   apps: App[];
 
-  @OneToMany(() => Explanation, (explanation: Explanation) => explanation.question)
+  @OneToMany(
+    () => Explanation,
+    (explanation: Explanation) => explanation.question,
+  )
   explanations: Explanation[];
+
+  @OneToMany(
+    () => QuestionTranslation,
+    (questionTranslation: QuestionTranslation) => questionTranslation.question,
+  )
+  questionTranslations: QuestionTranslation[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
