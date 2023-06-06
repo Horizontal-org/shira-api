@@ -23,7 +23,7 @@ export class GenerateQuizQuestionService {
 
   async generate(apps, fieldsOfWork, lang: string) {
     const { id: languageId } = await this.languageRepository.findOne({
-      where: { code: lang || 'es' },
+      where: { code: lang || 'en' },
     });
     this.fieldsOfWorkIds = fieldsOfWork;
     this.apps = await this.appRepository.findByIds(apps);
@@ -65,7 +65,7 @@ export class GenerateQuizQuestionService {
       })),
       explanations: question.explanations.map((explanation) => ({
         ...explanation,
-        text: explanation.explanationTranslations[0].content,
+        text: explanation.explanationTranslations[0]?.content,
       })),
     }));
     let final = [];
