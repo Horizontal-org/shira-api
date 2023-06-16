@@ -5,10 +5,11 @@ export class CreateQuestionDto {
     isPhishing: number;
     fieldOfWork?: string;
     apps: string[];
-  }
+  };
   explanations?: {
+    id?: number;
     position: string;
     index: string;
     text: string;
-  }[]
+  }[];
 }
