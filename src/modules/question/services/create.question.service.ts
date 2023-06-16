@@ -54,7 +54,7 @@ export class CreateQuestionService {
     question.apps = appEntities;
     question.fieldOfWork = fieldOfWork;
     question.languageId = langId;
-    question.content = ''
+    question.content = '';
     const saved = await this.questionRepo.save(question);
 
     // create or update questionTranslation based on questionId and languageId
@@ -73,31 +73,60 @@ export class CreateQuestionService {
     }
 
     if (newQuestion.explanations && newQuestion.explanations.length > 0) {
-      // removes old explanations to prevent duplicates
-      this.explanationRepo.delete({ question: saved });
-      // create new explanations
-      const explanationsArray = this.explanationRepo.create(
-        newQuestion.explanations.map((nq) => {
-          return {
-            ...nq,
-            question: saved,
-          };
-        }),
-      );
+      const questionId = saved.id;
 
-      const savedExplanations = await this.explanationRepo.save(
-        explanationsArray,
-      );
+      const query = `
+        SELECT id
+        FROM explanations
+        WHERE question_id = ?;
+      `;
 
-      const explanationTranslationArray =
-        this.explanationTranslationRepo.create(
-          savedExplanations.map((se) => ({
-            explanation: se,
-            content: se.text,
-            languageId: langId,
-          })),
+      const results = await this.explanationRepo.query(query, [questionId]);
+
+      const explanationsToDelete = results.filter((oldExp) => {
+        return !newQuestion.explanations.some(
+          (newExp) => newExp.id === oldExp.id,
         );
-      return this.explanationTranslationRepo.save(explanationTranslationArray);
+      });
+
+      for (const explanation of explanationsToDelete) {
+        await this.explanationRepo.delete(explanation.id);
+      }
+
+      for (const newExplanation of newQuestion.explanations) {
+        const explanation = await this.explanationRepo.findOne({
+          where: { id: newExplanation.id },
+        });
+
+        if (explanation) {
+          explanation.position = newExplanation.position;
+          explanation.index = newExplanation.index;
+          await this.explanationRepo.save(explanation);
+
+          const explanationTranslation =
+            await this.explanationTranslationRepo.findOne({
+              where: { explanation: explanation.id, languageId: language },
+            });
+          explanationTranslation.content = newExplanation.text;
+          await this.explanationTranslationRepo.save(explanationTranslation);
+        } else {
+          const savedExplanation = await this.explanationRepo.save(
+            this.explanationRepo.create({
+              position: newExplanation.position,
+              index: newExplanation.index,
+              question: saved,
+            }),
+          );
+
+          const newExplanationTranslation =
+            this.explanationTranslationRepo.create({
+              explanation: savedExplanation,
+              content: newExplanation.text,
+              languageId: langId,
+            });
+          await this.explanationTranslationRepo.save(newExplanationTranslation);
+        }
+      }
     }
   }
 }
