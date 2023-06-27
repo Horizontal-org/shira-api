@@ -101,6 +101,7 @@ export class CreateQuestionService {
         if (explanation) {
           explanation.position = newExplanation.position;
           explanation.index = newExplanation.index;
+          explanation.text = '';
           await this.explanationRepo.save(explanation);
 
           const explanationTranslation =
@@ -114,6 +115,7 @@ export class CreateQuestionService {
             this.explanationRepo.create({
               position: newExplanation.position,
               index: newExplanation.index,
+              text: '',
               question: saved,
             }),
           );
