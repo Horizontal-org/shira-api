@@ -72,18 +72,21 @@ export class CreateQuestionService {
       await this.questionTranslationRepo.save(newQuestionTranslation);
     }
 
-    if (newQuestion.explanations && newQuestion.explanations.length > 0) {
-      const questionId = saved.id;
+    const questionId = saved.id;
 
-      const query = `
+    const getExplanations = `
         SELECT id
         FROM explanations
         WHERE question_id = ?;
       `;
 
-      const results = await this.explanationRepo.query(query, [questionId]);
+    const explanationResult = await this.explanationRepo.query(
+      getExplanations,
+      [questionId],
+    );
 
-      const explanationsToDelete = results.filter((oldExp) => {
+    if (newQuestion.explanations && newQuestion.explanations.length > 0) {
+      const explanationsToDelete = explanationResult.filter((oldExp) => {
         return !newQuestion.explanations.some(
           (newExp) => newExp.id === oldExp.id,
         );
@@ -128,6 +131,11 @@ export class CreateQuestionService {
             });
           await this.explanationTranslationRepo.save(newExplanationTranslation);
         }
+      }
+    } else {
+      // remove all explanations since there are none in the request
+      for (const explanation of explanationResult) {
+        await this.explanationRepo.delete(explanation.id);
       }
     }
   }
