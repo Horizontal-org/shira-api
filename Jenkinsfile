@@ -27,7 +27,7 @@ pipeline {
 
             script {
               sh '''            
-                ssh -o StrictHostKeyChecking=no root@shira.app "cd /home/shira-production/shira-api ; docker image prune -a -f"
+                ssh -o StrictHostKeyChecking=no root@shira.app "cd /home/shira-production/shira-api ; docker image prune -a -f "
               '''
             }
           }
