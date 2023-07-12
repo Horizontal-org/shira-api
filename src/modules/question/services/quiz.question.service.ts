@@ -68,6 +68,8 @@ export class GenerateQuizQuestionService {
         text: explanation.explanationTranslations[0]?.content,
       })),
     }));
+
+    
     let final = [];
     // if 1 app return everything from that app
     if (apps.length === 1) {
@@ -89,6 +91,7 @@ export class GenerateQuizQuestionService {
         });
       }
 
+
       // order repetition
       const repetitionKeys = Object.keys(appCounter).sort((a, b) => {
         return appCounter[a].length - appCounter[b].length;
@@ -109,7 +112,8 @@ export class GenerateQuizQuestionService {
         for (let j = 0; j < appCounter[appId].length; j++) {
           const questionId = appCounter[appId][j];
           const question = all.find((q) => q.id == questionId);
-          if (!usedQuestions.includes(questionId) && usedApps[appId] <= perc) {
+          // if (!usedQuestions.includes(questionId) && usedApps[appId] <= perc) {  REMOVED PERCENTAGE CHECK, I DONT KNOW IF WE NEED THIS ANYMORE
+          if (!usedQuestions.includes(questionId)) {
             questionsWithApps.push({
               ...question,
               apps: null,
@@ -121,12 +125,100 @@ export class GenerateQuizQuestionService {
         }
       }
 
-      final = this.fillFieldsOfWork(questionsWithApps);
+      final = this.balancePhishing(questionsWithApps)
+      // CREO QUE YA NO NECESITAMOS ESTO final = this.fillFieldsOfWork(questionsWithApps);
+      
       if (final.length > 0 ) {
         this.shuffleArray(final)
       }
       return final;
     }
+  }
+
+
+  private balancePhishing = (questions) => {
+    
+    console.log("🚀 ~ file: quiz.question.service.ts:140 ~ GenerateQuizQuestionService ~ this.fieldsOfWorkIds:", this.fieldsOfWorkIds)
+    // console.log("🚀 ~ file: quiz.question.service.ts:140 ~ GenerateQuizQuestionService ~ console.log ~ questions:", questions)
+
+    // aunque agarre 10 preguntas que cumplen mis fields of work si no tienen un buen balance de phising/nophising saco las que haga falta para lograrlo
+
+    this.shuffleArray(questions)
+    const sorted = questions.sort((a, b) => this.fieldsOfWorkIds.includes(b.fieldOfWorkId) - this.fieldsOfWorkIds.includes(a.fieldOfWorkId))
+    const firstTen = sorted.slice(0, 10)
+    console.log("FIRST TEN -> ", firstTen.map((q) => {return {
+      id: q.id, phising: q.isPhising, fieldsOfWorkId: q.fieldOfWorkId, app: q.app.name 
+    }}))
+
+    const extra = sorted.slice(10)
+    console.log("REMAINING -> ", extra.map((q) => {return {
+      id: q.id, phising: q.isPhising, fieldsOfWorkId: q.fieldOfWorkId, app: q.app.name 
+    }}))
+
+    if (extra.length === 0) {
+      return firstTen
+    }
+
+    // check if the balance of the first ten questions is valid
+    let phishingPercentage = this.getPhishingPercentage(firstTen)
+
+
+    if (phishingPercentage > 60) {
+      console.log("REMOVE PHISHING ", phishingPercentage)
+      this.changeBalance(firstTen, extra, 0)
+    } else if (phishingPercentage < 50) {
+      console.log("ADD PHISHING ", phishingPercentage)
+      this.changeBalance(firstTen, extra, 1)
+    }
+
+    console.log("FIRST TEN -> ", firstTen.map((q) => {return {
+      id: q.id, phising: q.isPhising, fieldsOfWorkId: q.fieldOfWorkId, app: q.app.name 
+    }}))
+    phishingPercentage = this.getPhishingPercentage(firstTen)
+
+    return firstTen
+  }
+
+  private changeBalance = (firstTen, extra, addPhising) => {
+    let usefulExtra = extra.filter(e => addPhising ? e.isPhising : !e.isPhising)
+    console.log("usefulExtra -> ", usefulExtra.map((q) => {return {
+      id: q.id, phising: q.isPhising, fieldsOfWorkId: q.fieldOfWorkId, app: q.app.name 
+    }}))
+
+    addPhising ? firstTen.sort((a, b) => b.isPhising - a.isPhising ) : firstTen.sort((a, b) => a.isPhising - b.isPhising )
+    console.log("sortedByPhishingState -> ", firstTen.map((q) => {return {
+      id: q.id, phising: q.isPhising, fieldsOfWorkId: q.fieldOfWorkId, app: q.app.name 
+    }}))
+
+    if (usefulExtra.length > 0) {
+      // replace
+      firstTen.splice(firstTen.length - 1, 1, usefulExtra[0])
+      usefulExtra.shift()
+      
+      const phishingPercentage = this.getPhishingPercentage(firstTen)
+
+      if (phishingPercentage > 60) {
+        console.log("REMOVE PHISHING ", phishingPercentage)
+        this.changeBalance(firstTen, usefulExtra, 0)
+      } else if (phishingPercentage < 50) {
+        console.log("ADD PHISHING ", phishingPercentage)
+        this.changeBalance(firstTen, usefulExtra, 1)
+      }
+    }
+  }
+
+  private getPhishingPercentage = (array) => {
+    let isPhising = 0
+    for (let i = 0; i < 10; i++) {
+      if (array[i]) {
+        if (array[i].isPhising) {
+          isPhising += 1
+        }
+      }
+    }
+
+    console.log("IS PHISING -> ", isPhising * 100 / array.length)
+    return isPhising * 100 / array.length 
   }
 
   private fillFieldsOfWork = (questions) => {
