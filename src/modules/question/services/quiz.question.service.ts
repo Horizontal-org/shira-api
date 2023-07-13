@@ -12,6 +12,9 @@ export class GenerateQuizQuestionService {
   private apps;
   private fieldsOfWorkIds;
 
+  private MIN_PHISHING_PERCENTAGE = 50
+  private MAX_PHISHING_PERCENTAGE = 60
+  
   constructor(
     @InjectRepository(Question)
     private readonly questionRepository: Repository<Question>,
@@ -127,7 +130,7 @@ export class GenerateQuizQuestionService {
 
       final = this.balancePhishing(questionsWithApps)
       // CREO QUE YA NO NECESITAMOS ESTO final = this.fillFieldsOfWork(questionsWithApps);
-      
+
       if (final.length > 0 ) {
         this.shuffleArray(final)
       }
@@ -163,10 +166,10 @@ export class GenerateQuizQuestionService {
     let phishingPercentage = this.getPhishingPercentage(firstTen)
 
 
-    if (phishingPercentage > 60) {
+    if (phishingPercentage > this.MAX_PHISHING_PERCENTAGE) {
       console.log("REMOVE PHISHING ", phishingPercentage)
       this.changeBalance(firstTen, extra, 0)
-    } else if (phishingPercentage < 50) {
+    } else if (phishingPercentage < this.MIN_PHISHING_PERCENTAGE) {
       console.log("ADD PHISHING ", phishingPercentage)
       this.changeBalance(firstTen, extra, 1)
     }
@@ -197,10 +200,10 @@ export class GenerateQuizQuestionService {
       
       const phishingPercentage = this.getPhishingPercentage(firstTen)
 
-      if (phishingPercentage > 60) {
+      if (phishingPercentage > this.MAX_PHISHING_PERCENTAGE) {
         console.log("REMOVE PHISHING ", phishingPercentage)
         this.changeBalance(firstTen, usefulExtra, 0)
-      } else if (phishingPercentage < 50) {
+      } else if (phishingPercentage < this.MIN_PHISHING_PERCENTAGE) {
         console.log("ADD PHISHING ", phishingPercentage)
         this.changeBalance(firstTen, usefulExtra, 1)
       }
@@ -208,18 +211,13 @@ export class GenerateQuizQuestionService {
   }
 
   private getPhishingPercentage = (array) => {
-    let isPhising = 0
-    for (let i = 0; i < 10; i++) {
-      if (array[i]) {
-        if (array[i].isPhising) {
-          isPhising += 1
-        }
-      }
-    }
-
-    console.log("IS PHISING -> ", isPhising * 100 / array.length)
-    return isPhising * 100 / array.length 
-  }
+    const selectedQuestions = array.slice(0, 10);
+    const phishingCount = selectedQuestions.filter((q) => q.isPhising).length;
+    const percentage = (phishingCount * 100) / selectedQuestions.length;
+  
+    console.log("IS PHISHING -> ", percentage);
+    return percentage;
+  };
 
   private fillFieldsOfWork = (questions) => {
     let final = questions.filter((af) =>
