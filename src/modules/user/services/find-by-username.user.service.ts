@@ -14,8 +14,6 @@ export class FindByUsernameUserService implements IFindByUsernameUserService {
 
   async execute(username: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { email: username } });
-        
-    if (!user) throw new NotFoundUserException();
 
     return user;
   }
