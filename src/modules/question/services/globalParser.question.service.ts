@@ -23,7 +23,7 @@ export class GlobalParserQuestionService {
   ) {}
   // createOrUpdateQuestion
   async export({ lang, res }) {
-    console.log(lang);
+    console.log('language:', lang);
     const { id: languageId } = await this.languageRepository.findOne({
       where: { code: lang || 'en' },
     });
@@ -51,6 +51,8 @@ export class GlobalParserQuestionService {
       });
 
     const resData = await query.getMany();
+    console.log('questionQuantity', resData.length);
+    console.log('data', resData);
 
     if (!resData) {
       return res.status(404).send('Question not found');
@@ -59,6 +61,7 @@ export class GlobalParserQuestionService {
     const $ = cheerio.load(`<div id='questions'></div>`);
 
     const questionDivs = resData.map((question) => {
+      console.log(question.id);
       const questionDiv = $(`<div data-question-id='${question.id}'></div>`);
       const questionContent = $(
         `<div>${question.questionTranslations[0].content}</div>`,
