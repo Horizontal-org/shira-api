@@ -29,18 +29,20 @@ export class CreateQuestionService {
     private readonly languageRepo: Repository<Language>,
   ) {}
   // createOrUpdateQuestion
-  async create(newQuestion: CreateQuestionDto, id?: string, langId?: number) {
+  async create(newQuestion: CreateQuestionDto, id?: number, langId?: number) {
     let question: Question;
     const fieldOfWork = await this.fieldOfWorkRepo.findOne({
-      where: { id: newQuestion.question.fieldOfWork },
+      where: { id: parseInt(newQuestion.question.fieldOfWork) },
     });
     const appEntities = await this.appRepo.find({
       where: { id: In(newQuestion.question.apps) },
     });
+
+    // TODO CHECK: i think we don't need it
     // find language by languageId
-    const language = await this.languageRepo.findOne({
-      where: { id: langId },
-    });
+    // const language = await this.languageRepo.findOne({
+    //   where: { id: langId },
+    // });
 
     if (id) {
       question = await this.questionRepo.findOne({
@@ -59,7 +61,7 @@ export class CreateQuestionService {
 
     // create or update questionTranslation based on questionId and languageId
     const questionTranslation = await this.questionTranslationRepo.findOne({
-      where: { question: saved, languageId: language },
+      where: { question: saved, languageId: langId },
     });
     if (questionTranslation) {
       questionTranslation.content = newQuestion.question.content;
@@ -109,7 +111,7 @@ export class CreateQuestionService {
 
           const explanationTranslation =
             await this.explanationTranslationRepo.findOne({
-              where: { explanation: explanation.id, languageId: language },
+              where: { explanation: explanation, languageId: langId },
             });
           explanationTranslation.content = newExplanation.text;
           await this.explanationTranslationRepo.save(explanationTranslation);

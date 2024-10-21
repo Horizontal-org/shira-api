@@ -140,7 +140,7 @@ export class GlobalParserQuestionService {
         // console.log('explanations', explanations);
         const questionTranslated =
           await this.QuestionTranslationRepository.findOne({
-            where: { question: questionId, languageId },
+            where: { questionId: parseInt(questionId), languageId },
           });
 
         if (!questionTranslated) {
@@ -155,9 +155,10 @@ export class GlobalParserQuestionService {
           for (const explanation of explanations) {
             const explanationId = $(explanation).attr('data-explanation-id');
             const explanationContent = $(explanation).find('div').text();
+            //TODO TEST -> CHANGE OF TYPES
             const explanationTranslated =
               await this.ExplanationTranslationRepository.findOne({
-                where: { explanation: explanationId, languageId },
+                where: { explanationId: parseInt(explanationId), languageId },
               });
             if (!explanationTranslated) {
               const explanationTranslation = new ExplanationTranslation();
@@ -185,7 +186,8 @@ export class GlobalParserQuestionService {
             const explanationContent = $(explanation).find('div').text();
             const explanationTranslated =
               await this.ExplanationTranslationRepository.findOne({
-                where: { explanation: explanationId, languageId },
+                //TODO TEST -> CHANGE OF TYPES
+                where: { explanationId: parseInt(explanationId), languageId },
               });
             if (!explanationTranslated) {
               const explanationTranslation = new ExplanationTranslation();

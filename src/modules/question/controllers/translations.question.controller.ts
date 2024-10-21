@@ -12,9 +12,11 @@ export class TranslationsQuestionController {
   ) {}
 
   @Get(':id/translations')
-  async getQuestion(@Param('id') id: string, @Query('lang') lang: string) {
+  async getQuestion(@Param('id') id: number, @Query('lang') lang: string) {
 
-    const res = await this.questionRepository.findOne(id, {
+    const res = await this.questionRepository.findOne(
+    {
+      where: { id: id },
       relations: [
         'questionTranslations', 
         'questionTranslations.languageId', 

@@ -6,15 +6,16 @@ import {
   TYPES,
   IFindByUsernameUserService,
   IGetByIdUserApplication,
+  IFindByIdUserService,
 } from '../interfaces';
 
 export class GetByIdUserApplication implements IGetByIdUserApplication {
   constructor(
     @Inject(TYPES.services.IFindByIdUserService)
-    private readonly findByIdUserService: IFindByUsernameUserService,
+    private readonly findByIdUserService: IFindByIdUserService,
   ) {}
 
-  async execute(userId: string): Promise<ReadUserDto> {
+  async execute(userId: number): Promise<ReadUserDto> {
     const user = this.findByIdUserService.execute(userId);
     return plainToClass(ReadUserDto, user);
   }

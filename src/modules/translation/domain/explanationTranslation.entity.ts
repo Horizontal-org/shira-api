@@ -13,6 +13,7 @@ export class ExplanationTranslation {
   @PrimaryGeneratedColumn()
   id: number;
 
+  //TODO REFACTOR AND CHOOSE ONE
   @ManyToOne(
     () => Explanation,
     (explanation: Explanation) => explanation.explanationTranslations,
@@ -23,6 +24,18 @@ export class ExplanationTranslation {
   )
   @JoinColumn({ name: 'explanation_id' })
   explanation: Explanation;
+
+  //TODO REFACTOR AND CHOOSE ONE
+  @ManyToOne(
+    () => Explanation,
+    (explanation: Explanation) => explanation.explanationTranslations,
+    {
+      // eager: true,
+      onDelete: 'CASCADE',
+    },
+  )
+  @JoinColumn({ name: 'explanation_id' })
+  explanationId: number;
 
   @ManyToOne(
     () => Language,

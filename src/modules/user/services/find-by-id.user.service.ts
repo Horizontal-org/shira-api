@@ -11,7 +11,7 @@ export class FindByidUserService implements IFindByIdUserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async execute(id: string): Promise<UserEntity> {
+  async execute(id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: id } });
     if (!user) throw new NotFoundUserException();
 
