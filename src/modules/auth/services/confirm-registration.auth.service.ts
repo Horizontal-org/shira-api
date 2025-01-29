@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { IConfirmRegistrationAuthService, IValidateRegistrationAuthService, TYPES } from '../interfaces';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -32,11 +32,15 @@ export class ConfirmRegistrationAuthService implements IConfirmRegistrationAuthS
   ) {}
 
   async execute(inviteHash: string): Promise<void> {
-
-    const registration = await this.regRepo.findOneOrFail({ where: {
+    
+    const registration = await this.regRepo.findOne({ where: {
         invitationHash: inviteHash
     }})
     
+    if (!registration) {
+      throw new NotFoundException()
+    }
+
     await this.checkRegistrationExpired(registration.expiresAt)
 
     await this.validateRegistrationAuthService.execute({
@@ -55,10 +59,6 @@ export class ConfirmRegistrationAuthService implements IConfirmRegistrationAuthS
         role: Role.SpaceAdmin
     });
 
-    const spaceDto = new CreateSpaceDto()
-    spaceDto.firstUser = user
-    spaceDto.name = registration.spaceName
-    
     await this.createSpaceService.execute({
         name: registration.spaceName, 
         firstUser: user
@@ -67,9 +67,9 @@ export class ConfirmRegistrationAuthService implements IConfirmRegistrationAuthS
     return
   }
 
-  private async checkRegistrationExpired(expiresAt: Date){    
-    if (compareAsc(expiresAt, new Date()) === -1) {
-        throw new UnauthorizedException()
+  private async checkRegistrationExpired(expiresAt: Date){
+    if (expiresAt.getTime() < new Date().getTime()) {
+      throw new UnauthorizedException()
     }
   }
 }

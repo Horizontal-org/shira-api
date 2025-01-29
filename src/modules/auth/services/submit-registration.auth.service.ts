@@ -23,8 +23,6 @@ export class SubmitRegistrationAuthService implements ISubmitRegistrationAuthSer
   
     const expiresAt = addDays(new Date(), 1) ;
 
-    
-
     registration.email = data.email
     registration.passphrase = data.passphrase
     registration.password = await hashPassword(data.password)

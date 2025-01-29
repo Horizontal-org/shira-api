@@ -1,9 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
-import * as crypto from 'crypto'
+import { Repository } from 'typeorm';
 import { PassphraseEntity } from '../domain/passphrase.entity';
-import { ICreatePassphraseService } from '../interfaces/services/create.passphrase.service.interface';
 import { ICheckPassphraseService } from '../interfaces/services/check.passphrase.service.interface';
 
 
@@ -21,6 +19,9 @@ export class CheckPassphraseService implements ICheckPassphraseService{
         code: passphrase,
     }})
     
+    if (!entity) {
+      throw new NotFoundException()
+    }
     return !!(entity.usedBy)
   }
 }
