@@ -30,8 +30,9 @@
 ## Run migration
   this needs to be inside docker container
 
-   - to run migrations `npm run typeorm run:migrations`
-   - to create migrations `npm run typeorm migration:create -- -n YourMigration`
+   - to run migrations `npm run typeorm -- migration:run -d ./src/utils/datasources/mysql.datasource.ts `
+   - to create migrations `npm run typeorm migration:create ./src/migrations/your_migration`
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
