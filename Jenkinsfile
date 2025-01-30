@@ -7,6 +7,8 @@ pipeline {
             branch 'main'  
           }
           steps {
+
+            echo 'Do nothing..'
             // script {
             //   sh '''            
             //     ssh -o StrictHostKeyChecking=no root@shira.app "cd /home/shira-production/shira-api ; git pull"
