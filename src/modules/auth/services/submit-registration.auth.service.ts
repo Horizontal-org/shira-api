@@ -8,12 +8,16 @@ import { RegistrationEntity } from '../domain/registration.entity';
 import { Repository } from 'typeorm';
 import { addDays } from 'date-fns';
 import { hashPassword } from 'src/utils/password.utils';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class SubmitRegistrationAuthService implements ISubmitRegistrationAuthService {
   constructor(
     @InjectRepository(RegistrationEntity)
     private readonly regRepo: Repository<RegistrationEntity>,
+    @InjectQueue('emails')
+    private emailsQueue: Queue
   ) {}
 
   async execute(data: RegisterAuthDto): Promise<void> {
@@ -32,8 +36,14 @@ export class SubmitRegistrationAuthService implements ISubmitRegistrationAuthSer
 
     await this.regRepo.save(registration)
 
-    //TODO SEND MAIL
-    
+    this.emailsQueue.add('send', {
+      to: registration.email,
+      from: process.env.SMTP_GLOBAL_FROM, // sender address
+      subject: 'CONFIRM REGISTRATION', // Subject line
+      template: 'confirm-registration',
+      data: { ...registration }
+    })
+
     return
   }
 }

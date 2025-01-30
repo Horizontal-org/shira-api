@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   dev:
     container_name: shira-api-dev
@@ -48,21 +46,6 @@ services:
     networks:
         - nestjs-network
     restart: unless-stopped
-  db:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_DATABASE: "${MYSQL_DATABASE}"
-      MYSQL_USER: "${MYSQL_USER}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"    
-    expose:
-      - '3306'
-    volumes:
-      - db-data:/var/lib/mysql
-    networks:
-      - nestjs-network
-
 networks:
   nestjs-network:
 

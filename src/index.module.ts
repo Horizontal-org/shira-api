@@ -16,12 +16,16 @@ import { ConsoleModule } from 'nestjs-console';
 import { SurveyModule } from './modules/survey/survey.module';
 import { PassphraseModule } from './modules/passphrase/passphrase.module';
 import { SpaceModule } from './modules/space/space.module';
+import { QueueModule } from './modules/queue/queue.module';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeOrmModuleOptions),
     AppModule,
+    QueueModule,
+    EmailModule,
     ConsoleModule,
     FieldOfWorkModule,
     QuestionModule,
