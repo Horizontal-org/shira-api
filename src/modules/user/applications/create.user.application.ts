@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
 import { hashPassword } from '../../../utils/password.utils';
@@ -9,6 +9,7 @@ import {
   ICreateUserApplication,
   ICreateUserService,
 } from '../interfaces';
+import { UserEntity } from '../domain/user.entity';
 
 @Injectable()
 export class CreateUserApplication implements ICreateUserApplication {
@@ -16,18 +17,17 @@ export class CreateUserApplication implements ICreateUserApplication {
     @Inject(TYPES.services.ICreateUserService)
     private readonly createUserService: ICreateUserService,
   ) {}
-  async execute(createUserDto: CreateUserDto): Promise<ReadUserDto> {
-    const password = await hashPassword(createUserDto.password);
+  async execute(createUserDto: CreateUserDto): Promise<UserEntity> {    
     let user = null
     try {
       user = await this.createUserService.execute({
         ...createUserDto,
-        password,
       });
     } catch (e) {
       console.log("🚀 ~ file: create.user.application.ts ~ line 30 ~ CreateUserApplication ~ execute ~ e", e)      
+      throw new InternalServerErrorException()
     }
 
-    return plainToClass(ReadUserDto, user);
+    return user
   }
 }

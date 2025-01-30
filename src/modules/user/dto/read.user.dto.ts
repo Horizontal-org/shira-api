@@ -14,5 +14,9 @@ export class ReadUserDto {
 
   @Expose()
   @IsString()
+  role: string;
+
+  @Expose()
+  @IsString()
   readonly createdAt: string;
 }

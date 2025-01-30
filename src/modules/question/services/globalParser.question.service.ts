@@ -155,7 +155,6 @@ export class GlobalParserQuestionService {
           for (const explanation of explanations) {
             const explanationId = $(explanation).attr('data-explanation-id');
             const explanationContent = $(explanation).find('div').text();
-            //TODO TEST -> CHANGE OF TYPES
             const explanationTranslated =
               await this.ExplanationTranslationRepository.findOne({
                 where: { explanationId: parseInt(explanationId), languageId },
@@ -186,7 +185,6 @@ export class GlobalParserQuestionService {
             const explanationContent = $(explanation).find('div').text();
             const explanationTranslated =
               await this.ExplanationTranslationRepository.findOne({
-                //TODO TEST -> CHANGE OF TYPES
                 where: { explanationId: parseInt(explanationId), languageId },
               });
             if (!explanationTranslated) {

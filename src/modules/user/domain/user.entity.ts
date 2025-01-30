@@ -4,6 +4,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Role } from './role.enum';
 
 
 @Exclude()
@@ -19,6 +20,9 @@ export class UserEntity {
 
   @Column()
   password: string;
+
+  @Column()
+  role: Role
 
   @Expose()
   @Column({ name: 'created_at' })

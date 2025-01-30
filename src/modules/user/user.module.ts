@@ -9,6 +9,8 @@ import {
   servicesUserProviders,
   checkPasswordUserApplicationProvider,
   getByIdUserApplicationProvider,
+  findByUernameUserServiceProvider,
+  createUserApplicationProvider
 } from './user.providers';
 
 @Module({
@@ -25,6 +27,8 @@ import {
   exports: [
     checkPasswordUserApplicationProvider,
     getByIdUserApplicationProvider,
+    findByUernameUserServiceProvider,
+    createUserApplicationProvider
   ],
 })
 export class UserModule {}

@@ -14,6 +14,8 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConsoleModule } from 'nestjs-console';
 import { SurveyModule } from './modules/survey/survey.module';
+import { PassphraseModule } from './modules/passphrase/passphrase.module';
+import { SpaceModule } from './modules/space/space.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { SurveyModule } from './modules/survey/survey.module';
     SurveyModule,
     TranslationModule,
     LanguageModule,
+    PassphraseModule,
+    SpaceModule
   ],
   controllers: [IndexController],
   providers: [IndexService],

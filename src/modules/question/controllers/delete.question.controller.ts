@@ -5,6 +5,8 @@ import { AuthController } from 'src/utils/decorators/auth-controller.decorator';
 import { Repository } from 'typeorm';
 import { Question } from '../domain';
 import { QuestionTranslation } from '../../translation/domain/questionTranslation.entity';
+import { Roles } from 'src/modules/auth/decorators/roles.decorators';
+import { Role } from 'src/modules/user/domain/role.enum';
 
 @AuthController('question')
 export class DeleteQuestionController {
@@ -16,6 +18,7 @@ export class DeleteQuestionController {
   ) {}
 
   @Delete(':id')
+  @Roles(Role.SpaceAdmin)
   async handler(
     @Param('id', ParseIntPipe)
     id: DeleteQuestionDto,

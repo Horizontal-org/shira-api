@@ -8,6 +8,8 @@ import {
   ICreateUserApplication,
   TYPES,
 } from '../interfaces';
+import { Role } from '../domain/role.enum';
+import { hashPassword } from 'src/utils/password.utils';
 
 @Injectable()
 export class UserCommander {
@@ -20,7 +22,7 @@ export class UserCommander {
     const groupCommand = this.consoleService.createGroupCommand(
       {
         command: 'users',
-        description: 'Create, Update, List and Delete users',
+        description: 'Create users',
       },
       cli,
     )
@@ -28,52 +30,33 @@ export class UserCommander {
     this.consoleService.createCommand(
       {
         command: 'create <username>',
-        options: [
-          {
-            flags: '-a, --isAdmin',
-            required: false,
-          },
-        ],
       },
-      (username, options: { isAdmin: boolean }) =>
-        this.createUser(username, options.isAdmin),
+      (username) => {
+        return this.createUser(username)
+      },
       groupCommand,
     );
-
-    this.consoleService.createCommand(
-      {
-        command: 'bulk-create',
-        description: 'Create a bunch of random users',
-      },
-      () => this.createUsers(),
-      groupCommand,
-    );
+    
   }
 
-  async createUser(username: string, isAdmin = false) {
+  async createUser(username: string) {
     prompt.start();
-    const { password } = await prompt.get(['password']);
+    const { password, roleSlug } = await prompt.get(['password', 'roleSlug']);
 
+    const roleValid = Object.values(Role).some(r => r === roleSlug)
+
+    if (!roleValid) {
+      console.log(`Role ${roleSlug} is not a valid role`);
+      return
+    }
+    
     const user = await this.createUserApplication.execute({
       email: username,
-      password: password.toString(),
+      password: await hashPassword(password.toString()),
+      role: roleSlug
     });
 
-    console.log(`User ${username} was created with id ${user.id}`);
+    console.log(`User ${username} was created with id ${user.id} and role ${user.role}`);
   }
-
-  async createUsers() {
-    prompt.start();
-
-    for (let i = 0; i < 10; i++) {
-      await this.createUserApplication.execute({
-        email: Math.random().toString(36).substring(2, 7) + 'username',
-        password: Math.random().toString(36).substring(2, 7) + 'password',
-      });
-    }
-
-    console.log(`Users created`);
-  }
-
  
 }

@@ -9,9 +9,6 @@ import {
   Controller,
 } from '@nestjs/common';
 
-import { FilesInterceptor } from '@nestjs/platform-express';
-import { AuthController } from 'src/utils/decorators/auth-controller.decorator';
-
 import { ParserQuestionService } from '../services/individualParser.question.service';
 import { GlobalParserQuestionService } from '../services/globalParser.question.service';
 

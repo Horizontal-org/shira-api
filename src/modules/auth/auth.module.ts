@@ -8,13 +8,23 @@ import {
   servicesAuthProviders,
 } from './auth.provider';
 import { JwtStrategy } from './strategy/jwt.auth.strategy';
+import { PassphraseModule } from '../passphrase/passphrase.module';
+import { SpaceModule } from '../space/space.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { RegistrationEntity } from './domain/registration.entity';
+
 @Module({
   imports: [
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
-    UserModule,
+    UserModule,    
+    SpaceModule,
+    PassphraseModule,
+    TypeOrmModule.forFeature([
+      RegistrationEntity
+  ]),
   ],
   controllers: [...authControllers],
   providers: [

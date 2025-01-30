@@ -17,6 +17,7 @@ export class CreateUserService implements ICreateUserService {
   async execute({
     email: username,
     password,
+    role
   }: CreateUserDto): Promise<UserEntity> {
     let user = null
     try {
@@ -28,6 +29,7 @@ export class CreateUserService implements ICreateUserService {
       user = new UserEntity();
       user.email = username;
       user.password = password;
+      user.role = role
 
     } catch (e) {
       console.log("🚀 ~ file: create.user.service.ts ~ line 26 ~ CreateUserService ~ e", e)      
