@@ -54,7 +54,7 @@ pipeline {
 
             script {
               sh '''            
-                ssh -o StrictHostKeyChecking=no root@beta.shira.app "cd /home/shira-staging/shira-api ; docker-compose -f docker-compose.app.yml exec -it staging npm run typeorm migration:run -- -d ./src/utils/datasources/mysql.datasource.ts"
+                ssh -o StrictHostKeyChecking=no root@beta.shira.app "cd /home/shira-staging/shira-api ; docker-compose -f docker-compose.app.yml exec staging npm run typeorm migration:run -- -d ./src/utils/datasources/mysql.datasource.ts"
               '''
             }
 
